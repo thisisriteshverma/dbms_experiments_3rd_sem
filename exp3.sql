@@ -1,3 +1,67 @@
+-- EXPERIMENT 3: Employee-Department-Project Schema
+-- Name: Ritesh Verma | Class: AIML-4(B)
+-- Roll No: 26LBCS8305
+-- Database: MySQL
+
+CREATE DATABASE IF NOT EXISTS company_db;
+USE company_db;
+
+-- 1. Create tables
+CREATE TABLE Department (
+    dept_id INT PRIMARY KEY,
+    dept_name VARCHAR(50) NOT NULL,
+    location VARCHAR(50)
+);
+
+CREATE TABLE Project (
+    project_id INT PRIMARY KEY,
+    project_name VARCHAR(100) NOT NULL,
+    budget DECIMAL(12,2),
+    dept_id INT,
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id)
+);
+
+CREATE TABLE Employee (
+    emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100) NOT NULL,
+    salary DECIMAL(10,2),
+    hire_date DATE,
+    dept_id INT,
+    project_id INT,
+    FOREIGN KEY (dept_id) REFERENCES Department(dept_id),
+    FOREIGN KEY (project_id) REFERENCES Project(project_id)
+);
+
+-- 2. Insert 5 departments
+INSERT INTO Department (dept_id, dept_name, location) VALUES
+(1, 'IT', 'Delhi'),
+(2, 'HR', 'Mumbai'),
+(3, 'Finance', 'Bangalore'),
+(4, 'Marketing', 'Pune'),
+(5, 'Operations', 'Hyderabad');
+
+-- 3. Insert 8 projects
+INSERT INTO Project (project_id, project_name, budget, dept_id) VALUES
+(101, 'E-Commerce Platform', 1500000, 1),
+(102, 'AI Chatbot', 800000, 1),
+(103, 'Employee Portal', 600000, 2),
+(104, 'Financial Analytics', 1800000, 3),
+(105, 'Digital Marketing', 1200000, 4),
+(106, 'Supply Chain System', 1000000, 5),
+(107, 'Cloud Migration', 2200000, 1),
+(108, 'Customer Management', 1300000, 4);
+
+-- 4. Insert 30 employees
+INSERT INTO Employee (emp_id, emp_name, salary, hire_date, dept_id, project_id) VALUES
+(1,  'Aarav Sharma', 75000, '2021-01-15', 1, 101),
+(2,  'Priya Singh', 85000, '2020-08-28', 1, 102),
+(3,  'Rahul Verma', 65000, '2022-06-10', 1, 107),
+(4,  'Ananya Gupta', 95000, '2019-08-12', 1, 102),
+(5,  'Rohan Mehta', 70000, '2021-11-05', 1, 101),
+(6,  'Sneha Kapoor', 80000, '2020-09-18', 1, 107),
+(7,  'Vikas Kumar', 55000, '2022-04-10', 2, 103),
+(8,  'Neha Joshi', 60000, '2021-04-22', 2, 103),
+(9,  'Karan Malhotra', 58000, '2022-07-15', 2, 103),
 (10, 'Simran Kaur', 72000, '2020-12-01', 2, 103),
 (11, 'Pooja Agarwal', 68000, '2020-10-11', 2, 103),
 (12, 'Aditya Jain', 62000, '2022-02-14', 2, 103),
@@ -30,78 +94,3 @@ SELECT emp_name, salary
 FROM Employee;
 
 -- 7. Aggregate functions
-SELECT
-    COUNT(*) AS total_employees,
-    AVG(salary) AS average_salary,
-    MAX(salary) AS highest_salary,
-    MIN(salary) AS lowest_salary,
-    SUM(salary) AS total_salary
-FROM Employee;
-
--- 8. GROUP BY: employee count by department ID
-SELECT dept_id, COUNT(*) AS employee_count
-FROM Employee
-GROUP BY dept_id;
-
--- 9. GROUP BY: employee count by department name
-SELECT d.dept_name, COUNT(e.emp_id) AS employee_count
-FROM Department d
-JOIN Employee e ON d.dept_id = e.dept_id
-GROUP BY d.dept_name;
-
--- 10. CASE expression: categorize employees by salary
-SELECT
-    emp_name,
-    salary,
-    CASE
-        WHEN salary >= 90000 THEN 'High Salary'
-        WHEN salary >= 70000 THEN 'Medium Salary'
-        ELSE 'Low Salary'
-    END AS salary_category
-FROM Employee;
-
--- 11. ORDER BY: employees sorted by salary, highest first
-SELECT emp_name, salary
-FROM Employee
-ORDER BY salary DESC;
-
--- 12. Join Employee, Department, and Project
-SELECT
-    e.emp_id,
-    e.emp_name,
-    d.dept_name,
-    p.project_name,
-    e.salary
-FROM Employee e
-JOIN Department d ON e.dept_id = d.dept_id
-JOIN Project p ON e.project_id = p.project_id;
-
--- 13. Project-wise employee count
-SELECT
-    p.project_name,
-    COUNT(e.emp_id) AS employee_count
-FROM Project p
-LEFT JOIN Employee e ON p.project_id = e.project_id
-GROUP BY p.project_name
-ORDER BY employee_count DESC;
-
--- 14. Department-wise total salary
-SELECT
-    d.dept_name,
-    SUM(e.salary) AS total_salary
-FROM Department d
-JOIN Employee e ON d.dept_id = e.dept_id
-GROUP BY d.dept_name
-ORDER BY total_salary DESC;
-
--- 15. GROUP BY, HAVING, and ORDER BY
-SELECT
-    d.dept_name,
-    COUNT(e.emp_id) AS total_employees,
-    AVG(e.salary) AS average_salary,
-    MAX(e.salary) AS highest_salary
-FROM Department d
-JOIN Employee e ON d.dept_id = e.dept_id
-GROUP BY d.dept_name
-HAVING AVG(e.salary) > 70000
-ORDER BY average_salary DESC;
