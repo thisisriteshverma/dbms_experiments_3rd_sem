@@ -4,7 +4,6 @@
 -- This script assumes company_db, Department, and Employee exist.
 -- For the Employee columns, this experiment uses emp_id, emp_name, salary,
 -- hire_date, dept_id, project_id, and manager_id if present.
-
 USE company_db;
 
 -- 1. Create an audit table for salary changes
