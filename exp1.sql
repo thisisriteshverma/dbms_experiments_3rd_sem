@@ -1,7 +1,7 @@
 -- Name: Ritesh Verma | Class: AIML-4(B) | Roll No: 26LBCS8305
 -- MySQL
 
-/*
+
 EXPERIMENT 1
 TITLE: ER Model for an Indian E-Commerce Platform
 
@@ -135,4 +135,4 @@ The ER model represents all nine requested entities.
 It includes primary keys, composite attributes, multivalued
 attributes, weak entities, specialization, and participation
 constraints.
-*/
+
